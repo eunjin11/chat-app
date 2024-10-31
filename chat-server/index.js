@@ -12,39 +12,19 @@ server.listen(3000, () => {
 
 const io = new Server(server, {
   cors: {
-    origin: ["http://localhost:3000"],
+    origin: ["http://localhost:5173"],
   },
 });
 
-app.get("/", (req, res) => {
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-      <head>
-        <title>Socket.IO Test</title>
-        <script src="/socket.io/socket.io.js"></script>
-        <script>
-          const socket = io();
-          
-          socket.on('connect', () => {
-            console.log('Connected to server');
-          });
-          
-          socket.on('disconnect', () => {
-            console.log('Disconnected from server');
-          });
-        </script>
-      </head>
-      <body>
-        <h1>Socket.IO Test</h1>
-      </body>
-    </html>
-  `);
-});
-
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  console.log(`a user connected: ${socket.id}`);
+
+  socket.on("send_message", (messageData) => {
+    console.log(messageData);
+    io.emit("message", messageData);
+  });
+
   socket.on("disconnect", () => {
-    console.log("user disconnected");
+    console.log(`User disconnected: ${socket.id}`);
   });
 });
