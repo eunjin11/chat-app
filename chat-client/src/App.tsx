@@ -1,35 +1,73 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState, FormEvent } from "react";
+import { io } from "socket.io-client";
+import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+interface MessageProps {
+  text: string;
+  username: string;
+  timestamp: string;
+}
+
+const App = () => {
+  const socket = io("http://localhost:3000");
+  const [messages, setMessages] = useState<MessageProps[]>([]);
+  const [messageInput, setMessageInput] = useState("");
+  const username = "테스트";
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("connected");
+    });
+
+    socket.on("message", (message) => {
+      setMessages((prev) => [...prev, message]);
+      console.log(message);
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("message");
+    };
+  }, []);
+
+  const sendMessage = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (messageInput.trim()) {
+      const messageData = {
+        text: messageInput,
+        username: username,
+        timestamp: new Date().toISOString(),
+      };
+      socket.emit("send_message", messageData);
+      setMessageInput("");
+    }
+  };
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+      {messages.map((msg, idx) => (
+        <div key={idx}>
+          <div>
+            <span>{msg.username}</span>
+            <span>{msg.text}</span>
+            <span>{new Date(msg.timestamp).toLocaleTimeString()}</span>
+          </div>
+        </div>
+      ))}
 
-export default App
+      <form onSubmit={sendMessage}>
+        <div>
+          <input
+            type="text"
+            value={messageInput}
+            onChange={(e) => setMessageInput(e.target.value)}
+            placeholder="메시지를 입력하세요..."
+          />
+          <button type="submit">전송</button>
+        </div>
+      </form>
+    </>
+  );
+};
+
+export default App;
