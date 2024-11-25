@@ -2,11 +2,14 @@ import express from "express";
 import { createServer } from "node:http";
 import { Server } from "socket.io";
 import connectDB from "./config/db.js";
+import roomRouter from "./routes/rooms.js";
 
 const app = express();
 app.use(express.json());
 
 connectDB();
+
+app.use(roomRouter);
 
 const server = createServer(app);
 
