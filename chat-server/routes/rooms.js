@@ -4,8 +4,9 @@ import { Room } from "../models/Room.js";
 const router = express.Router();
 
 // 채팅방 생성 API
-router.post("/api/rooms", async (req, res) => {
+router.post("/rooms", async (req, res) => {
   try {
+    console.log("받은 요청:", req.body);
     const { name, userId, username } = req.body;
 
     // 필수 필드 검증
