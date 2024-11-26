@@ -10,7 +10,7 @@ interface MessageProps {
 }
 
 const App = () => {
-  const socket = io("http://localhost:3000");
+  const socket = io("http://localhost:3001");
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [messageInput, setMessageInput] = useState("");
   const username = "테스트";
@@ -46,7 +46,6 @@ const App = () => {
 
   return (
     <>
-      <Button>버튼이 생겼다!</Button>
       {messages.map((msg, idx) => (
         <div key={idx}>
           <div>
@@ -65,7 +64,7 @@ const App = () => {
             onChange={(e) => setMessageInput(e.target.value)}
             placeholder="메시지를 입력하세요..."
           />
-          <button type="submit">전송</button>
+          <Button>전송</Button>
         </div>
       </form>
     </>
