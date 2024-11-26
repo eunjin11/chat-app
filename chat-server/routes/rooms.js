@@ -3,7 +3,17 @@ import { Room } from "../models/Room.js";
 
 const router = express.Router();
 
-// 채팅방 생성 API
+//채팅방 불러오기 GET
+router.get("/rooms", async (req, res) => {
+  try {
+    const rooms = await Room.find();
+    res.json(rooms);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// 채팅방 생성 POST
 router.post("/rooms", async (req, res) => {
   try {
     console.log("받은 요청:", req.body);
