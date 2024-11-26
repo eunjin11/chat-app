@@ -1,6 +1,7 @@
 import { useEffect, useState, FormEvent } from "react";
 import { io } from "socket.io-client";
 import "./App.css";
+import { Button } from "./components/ui/button";
 
 interface MessageProps {
   text: string;
@@ -45,6 +46,7 @@ const App = () => {
 
   return (
     <>
+      <Button>버튼이 생겼다!</Button>
       {messages.map((msg, idx) => (
         <div key={idx}>
           <div>
