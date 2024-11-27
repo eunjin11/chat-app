@@ -10,12 +10,25 @@ const roomSchema = new mongoose.Schema({
     {
       userId: String,
       username: String,
+      userProfileImage: String,
       joinedAt: {
+        type: Date,
+        default: Date.now,
+      },
+      lastRead: {
         type: Date,
         default: Date.now,
       },
     },
   ],
+
+  lastMessage: {
+    content: String,
+    senderId: String,
+    senderName: String,
+    senderAvatar: String,
+    sentAt: Date,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
