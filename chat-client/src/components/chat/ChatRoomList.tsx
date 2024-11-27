@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import axios from "axios";
+import { client } from "@/utils/api";
 
 interface LastSender {
   name: string;
@@ -18,31 +18,12 @@ interface ChatRoom {
   unreadCount: number;
 }
 
-const api = axios.create({
-  baseURL: "http://localhost:3001/api",
-  timeout: 5000,
-  headers: {
-    "Content-Type": "application/json",
-  },
-});
-
 const ChatRoomList = () => {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
 
   const fetchChatRooms = async () => {
-    try {
-      const response = await api.get<ChatRoom[]>("/rooms");
-      setChatRooms(response.data);
-    } catch (error) {
-      if (axios.isAxiosError(error)) {
-        const errorMessage =
-          error.response?.data?.error ||
-          "채팅방 목록을 불러오는데 실패했습니다.";
-        console.error(errorMessage);
-      } else {
-        console.error("알 수 없는 에러가 발생했습니다.");
-      }
-    }
+    const result = await client("/rooms");
+    setChatRooms(result);
   };
 
   useEffect(() => {
