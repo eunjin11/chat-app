@@ -12,7 +12,7 @@ const ChatRoomList = () => {
       unreadCount: 3,
       lastSender: {
         name: "김철수",
-        avatar: "https://github.com/shadcn.png",
+        avatar: "./../public/image/profile.png",
       },
     },
     {
@@ -37,7 +37,7 @@ const ChatRoomList = () => {
       unreadCount: 5,
       lastSender: {
         name: "박지민",
-        avatar: "https://github.com/shadcn.png",
+        avatar: "",
       },
     },
   ];
