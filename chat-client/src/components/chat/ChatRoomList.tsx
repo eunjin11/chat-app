@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -33,7 +34,8 @@ const ChatRoomList = () => {
   return (
     <div className="p-4">
       {chatRooms.map((chatRoom) => (
-        <div
+        <Link
+          to={`/chat/${chatRoom.id}`}
           key={chatRoom.id}
           className="flex items-center justify-between p-5 border-b hover:bg-slate-50 cursor-pointer"
         >
@@ -71,7 +73,7 @@ const ChatRoomList = () => {
               </Badge>
             )}
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
