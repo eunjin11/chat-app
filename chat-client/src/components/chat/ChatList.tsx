@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button } from "../ui/button";
-import { io } from "socket.io-client";
+import { io, Socket } from "socket.io-client";
+import { useParams } from "react-router-dom";
 
 interface MessageProps {
   text: string;
@@ -9,24 +10,32 @@ interface MessageProps {
 }
 
 const ChatList = () => {
-  const socket = io("http://localhost:3001");
+  const { roomId } = useParams();
+  const [socket, setSocket] = useState<Socket | null>(null);
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [messageInput, setMessageInput] = useState("");
   const username = "테스트";
 
   useEffect(() => {
-    socket.on("connect", () => {
+    const newSocket = io("http://localhost:3001", {
+      query: { roomId },
+    });
+
+    setSocket(newSocket);
+
+    newSocket.on("connect", () => {
       console.log("connected");
     });
 
-    socket.on("message", (message) => {
+    newSocket.on("message", (message) => {
       setMessages((prev) => [...prev, message]);
       console.log(message);
     });
 
     return () => {
-      socket.off("connect");
-      socket.off("message");
+      newSocket.off("connect");
+      newSocket.off("message");
+      newSocket.disconnect();
     };
   }, []);
 
@@ -37,8 +46,9 @@ const ChatList = () => {
         text: messageInput,
         username: username,
         timestamp: new Date().toISOString(),
+        roomId: roomId,
       };
-      socket.emit("send_message", messageData);
+      socket?.emit("send_message", messageData);
       setMessageInput("");
     }
   };
