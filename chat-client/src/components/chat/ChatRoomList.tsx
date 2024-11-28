@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { getChat } from "@/utils/api";
+import { getChatRooms } from "@/utils/api";
 
 interface LastSender {
   name: string;
@@ -22,7 +22,7 @@ const ChatRoomList = () => {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
 
   const fetchChatRooms = async () => {
-    const result = await getChat();
+    const result = await getChatRooms();
     setChatRooms(result);
   };
 

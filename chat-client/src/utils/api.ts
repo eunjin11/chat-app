@@ -16,7 +16,7 @@ const handleError = (error: unknown) => {
   }
 };
 
-export const getChat = async () => {
+export const getChatRooms = async () => {
   try {
     const response = await api.get("/rooms");
     return response.data;
