@@ -42,14 +42,18 @@ const io = new Server(server, {
 });
 
 io.on("connection", (socket) => {
-  console.log(`a user connected: ${socket.id}`);
+  const { roomId } = socket.handshake.query;
+  socket.join(roomId);
+
+  console.log(`User connected to room ${roomId}`);
 
   socket.on("send_message", (messageData) => {
     console.log(messageData);
-    io.emit("message", messageData);
+    io.to(messageData.roomId).emit("message", messageData);
   });
 
   socket.on("disconnect", () => {
-    console.log(`User disconnected: ${socket.id}`);
+    console.log(`User disconnected: ${roomId}`);
+    socket.leave(roomId);
   });
 });
