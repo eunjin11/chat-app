@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { client } from "@/utils/api";
+import { getChat } from "@/utils/api";
 
 interface LastSender {
   name: string;
@@ -22,7 +22,7 @@ const ChatRoomList = () => {
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
 
   const fetchChatRooms = async () => {
-    const result = await client("/rooms");
+    const result = await getChat();
     setChatRooms(result);
   };
 
@@ -45,7 +45,6 @@ const ChatRoomList = () => {
                 }
               />
             </Avatar>
-
             <div className="flex flex-col gap-1 flex-1">
               <div className="flex items-center gap-2">
                 <span className="font-medium">{chatRoom.name}</span>

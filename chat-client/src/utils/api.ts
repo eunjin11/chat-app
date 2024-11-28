@@ -8,15 +8,19 @@ const api = axios.create({
   },
 });
 
-export const client = async (path: string) => {
+const handleError = (error: unknown) => {
+  if (axios.isAxiosError(error)) {
+    console.error(error.response?.data?.error);
+  } else {
+    console.error("알 수 없는 에러가 발생했습니다.");
+  }
+};
+
+export const getChat = async () => {
   try {
-    const response = await api.get(path);
+    const response = await api.get("/rooms");
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error)) {
-      console.error(error.response?.data?.error);
-    } else {
-      console.error("알 수 없는 에러가 발생했습니다.");
-    }
+    handleError(error);
   }
 };
