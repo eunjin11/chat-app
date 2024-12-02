@@ -16,7 +16,7 @@ const ChatList = () => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [messages, setMessages] = useState<MessageProps[]>([]);
   const [messageInput, setMessageInput] = useState("");
-  const username = "테스트2";
+  const [username, setUsername] = useState("테스트 닉네임");
 
   useEffect(() => {
     const newSocket = io("http://localhost:3001", {
@@ -57,6 +57,13 @@ const ChatList = () => {
 
   return (
     <>
+      <Input
+        type="text"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="닉네임을 입력하세요"
+        className="mb-10 max-w-sm"
+      />
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <Avatar>
@@ -73,17 +80,28 @@ const ChatList = () => {
           <div
             key={idx}
             className={`flex ${
-              msg.username === "테스트" ? "justify-end" : "justify-start"
+              msg.username === username ? "justify-end" : "justify-start"
             }`}
           >
             <div
-              className={`${
-                msg.username === "테스트"
-                  ? "bg-black text-white"
-                  : " bg-gray-100 text-black"
-              }  rounded-lg py-2 px-3 max-w-[80%]`}
+              className={`flex flex-col ${
+                msg.username === username ? "items-end" : "items-start"
+              }`}
             >
-              {msg.text}
+              {msg.username !== username && (
+                <span className="text-sm text-gray-500 mb-1">
+                  {msg.username}
+                </span>
+              )}
+              <div
+                className={`${
+                  msg.username === username
+                    ? "bg-black text-white text-left"
+                    : "bg-gray-100 text-black text-left"
+                } rounded-lg py-2 px-3 text-sm`}
+              >
+                {msg.text}
+              </div>
             </div>
           </div>
         ))}
