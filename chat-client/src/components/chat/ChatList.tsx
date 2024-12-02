@@ -93,14 +93,32 @@ const ChatList = () => {
                   {msg.username}
                 </span>
               )}
-              <div
-                className={`${
-                  msg.username === username
-                    ? "bg-black text-white text-left"
-                    : "bg-gray-100 text-black text-left"
-                } rounded-lg py-2 px-3 text-sm`}
-              >
-                {msg.text}
+              <div className="flex items-end gap-2">
+                {msg.username === username && (
+                  <span className="text-xs text-gray-500">
+                    {new Date(msg.timestamp).toLocaleTimeString("ko-KR", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                )}
+                <div
+                  className={`${
+                    msg.username === username
+                      ? "bg-black text-white text-left"
+                      : "bg-gray-100 text-black text-left"
+                  } rounded-lg py-2 px-3 text-sm`}
+                >
+                  {msg.text}
+                </div>
+                {msg.username !== username && (
+                  <span className="text-xs text-gray-500">
+                    {new Date(msg.timestamp).toLocaleTimeString("ko-KR", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                )}
               </div>
             </div>
           </div>
