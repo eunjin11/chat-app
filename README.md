@@ -4,6 +4,9 @@ React, node.js, socket.io, mongoDB 학습용 채팅 앱입니다.
 
 개발 기간: 2024.11~진행 중
 
+<img width="780" alt="chat-app 화면" src="https://github.com/user-attachments/assets/9b10fc61-01fc-4ae7-a123-c0177996efae">
+
+
 </br>
 
 ---
