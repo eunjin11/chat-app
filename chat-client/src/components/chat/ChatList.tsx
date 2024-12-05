@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Button } from "../ui/button";
+import { useEffect, useState } from "react";
 import { io, Socket } from "socket.io-client";
 import { useParams } from "react-router-dom";
+import { Input } from "../ui/input";
+import ChatMessage from "./ChatMessage";
+import { ChatHeader } from "./ChatHeader";
+import ChatInputForm from "./ChatInputForm";
 
-interface MessageProps {
+export interface MessageProps {
   text: string;
   username: string;
   timestamp: string;
@@ -13,8 +16,7 @@ const ChatList = () => {
   const { roomId } = useParams();
   const [socket, setSocket] = useState<Socket | null>(null);
   const [messages, setMessages] = useState<MessageProps[]>([]);
-  const [messageInput, setMessageInput] = useState("");
-  const username = "테스트";
+  const [username, setUsername] = useState("테스트 닉네임");
 
   useEffect(() => {
     const newSocket = io("http://localhost:3001", {
@@ -39,43 +41,40 @@ const ChatList = () => {
     };
   }, []);
 
-  const sendMessage = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (messageInput.trim()) {
-      const messageData = {
-        text: messageInput,
-        username: username,
-        timestamp: new Date().toISOString(),
-        roomId: roomId,
-      };
-      socket?.emit("send_message", messageData);
-      setMessageInput("");
-    }
+  const handleSendMessage = (text: string) => {
+    const messageData = {
+      text: text,
+      username: username,
+      timestamp: new Date().toISOString(),
+      roomId: roomId,
+    };
+    socket?.emit("send_message", messageData);
   };
 
   return (
     <>
-      {messages.map((msg, idx) => (
-        <div key={idx}>
-          <div>
-            <span>{msg.username}</span>
-            <span>{msg.text}</span>
-            <span>{new Date(msg.timestamp).toLocaleTimeString()}</span>
-          </div>
-        </div>
-      ))}
-
-      <form onSubmit={sendMessage}>
-        <div>
-          <input
-            type="text"
-            value={messageInput}
-            onChange={(e) => setMessageInput(e.target.value)}
-            placeholder="메시지를 입력하세요..."
+      <Input
+        type="text"
+        value={username}
+        onChange={(e) => setUsername(e.target.value)}
+        placeholder="닉네임을 입력하세요"
+        className="mb-10 max-w-sm"
+      />
+      <ChatHeader
+        title={"채팅방 제목"}
+        roomImageUrl={"./../image/profile.png"}
+        description={"채팅방 설명"}
+      />
+      <div className="space-y-4 mb-6">
+        {messages.map((msg, idx) => (
+          <ChatMessage
+            key={idx}
+            message={msg}
+            isCurrentUser={msg.username === username}
           />
-          <Button>전송</Button>
-        </div>
-      </form>
+        ))}
+      </div>
+      <ChatInputForm onSendMessage={handleSendMessage} />
     </>
   );
 };
