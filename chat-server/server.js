@@ -4,6 +4,7 @@ import { Server } from "socket.io";
 import cors from "cors";
 import connectDB from "./config/db.js";
 import roomRouter from "./routes/rooms.js";
+import messageRouter from "./routes/messages.js";
 
 const app = express();
 
@@ -24,6 +25,7 @@ connectDB()
   });
 
 app.use("/api", roomRouter);
+app.use("/api", messageRouter);
 
 const server = createServer(app);
 
