@@ -5,20 +5,30 @@ import { Input } from "../ui/input";
 import ChatMessage from "./ChatMessage";
 import { ChatHeader } from "./ChatHeader";
 import ChatInputForm from "./ChatInputForm";
+import { getChatMessages } from "@/utils/api";
 
-export interface MessageProps {
-  text: string;
+export interface Message {
+  content: string;
+  sender: { username: string; userId: string };
   username: string;
-  timestamp: string;
+  createdAt: string;
 }
 
 const ChatList = () => {
   const { roomId } = useParams();
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [messages, setMessages] = useState<MessageProps[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [username, setUsername] = useState("테스트 닉네임");
 
+  const fetchChatMessages = async () => {
+    if (!roomId) return;
+    const result = await getChatMessages(roomId);
+    setMessages(result);
+  };
+
   useEffect(() => {
+    fetchChatMessages();
+
     const newSocket = io("http://localhost:3001", {
       query: { roomId },
     });
