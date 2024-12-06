@@ -41,7 +41,6 @@ const ChatList = () => {
 
     newSocket.on("message", (message) => {
       setMessages((prev) => [...prev, message]);
-      console.log(message);
     });
 
     return () => {
@@ -51,11 +50,12 @@ const ChatList = () => {
     };
   }, []);
 
-  const handleSendMessage = (text: string) => {
+  const handleSendMessage = async (text: string) => {
+    if (!roomId) return;
     const messageData = {
-      text: text,
-      username: username,
-      timestamp: new Date().toISOString(),
+      content: text,
+      sender: { username: username, userId: "1" },
+      createdAt: new Date().toISOString(),
       roomId: roomId,
     };
     socket?.emit("send_message", messageData);
@@ -80,7 +80,7 @@ const ChatList = () => {
           <ChatMessage
             key={idx}
             message={msg}
-            isCurrentUser={msg.username === username}
+            isCurrentUser={msg.sender.username === username}
           />
         ))}
       </div>
