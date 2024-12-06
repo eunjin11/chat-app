@@ -9,8 +9,8 @@ import { getChatMessages } from "@/utils/api";
 
 export interface Message {
   content: string;
-  sender: { username: string; userId: string };
   username: string;
+  userId: string;
   createdAt: string;
 }
 
@@ -51,12 +51,10 @@ const ChatList = () => {
   }, []);
 
   const handleSendMessage = async (text: string) => {
-    if (!roomId) return;
     const messageData = {
       content: text,
-      sender: { username: username, userId: "1" },
-      createdAt: new Date().toISOString(),
-      roomId: roomId,
+      username: username,
+      userId: "1",
     };
     socket?.emit("send_message", messageData);
   };
@@ -80,7 +78,7 @@ const ChatList = () => {
           <ChatMessage
             key={idx}
             message={msg}
-            isCurrentUser={msg.sender.username === username}
+            isCurrentUser={msg.username === username}
           />
         ))}
       </div>

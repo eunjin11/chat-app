@@ -21,9 +21,7 @@ const ChatMessage = ({ message, isCurrentUser }: ChatMessageProps) => {
         }`}
       >
         {!isCurrentUser && (
-          <span className="text-sm text-gray-500 mb-1">
-            {message.sender.username}
-          </span>
+          <span className="text-sm text-gray-500 mb-1">{message.username}</span>
         )}
         <div className="flex items-end gap-2">
           {isCurrentUser && (

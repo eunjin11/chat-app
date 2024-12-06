@@ -53,8 +53,7 @@ io.on("connection", (socket) => {
 
   socket.on("send_message", async (messageData) => {
     try {
-      const { roomId, content, sender } = messageData;
-      const { userId, username } = sender;
+      const { content, userId, username } = messageData;
 
       // 필수 필드 검증
       if (!content || !userId || !username) {
@@ -75,10 +74,8 @@ io.on("connection", (socket) => {
       // 메시지 생성
       const message = new Message({
         roomId,
-        sender: {
-          userId,
-          username,
-        },
+        userId,
+        username,
         content,
       });
 
