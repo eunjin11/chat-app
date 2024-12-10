@@ -48,7 +48,7 @@ const ChatList = () => {
       newSocket.off("message");
       newSocket.disconnect();
     };
-  }, []);
+  }, [roomId]);
 
   const handleSendMessage = async (text: string) => {
     const messageData = {
