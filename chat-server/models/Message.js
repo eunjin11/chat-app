@@ -6,10 +6,8 @@ const messageSchema = new mongoose.Schema({
     ref: "Room",
     required: true,
   },
-  sender: {
-    userId: String,
-    username: String,
-  },
+  userId: { type: String, required: true },
+  username: { type: String, required: true },
   content: {
     type: String,
     required: true,

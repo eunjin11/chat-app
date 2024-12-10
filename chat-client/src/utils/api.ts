@@ -16,6 +16,15 @@ const handleError = (error: unknown) => {
   }
 };
 
+export const getChatMessages = async (roomId: string) => {
+  try {
+    const response = await api.get(`/rooms/${roomId}/messages`);
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+};
+
 export const getChatRooms = async () => {
   try {
     const response = await api.get("/rooms");

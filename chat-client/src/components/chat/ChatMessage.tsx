@@ -1,7 +1,7 @@
-import { MessageProps } from "./ChatList";
+import { Message } from "./ChatList";
 
 interface ChatMessageProps {
-  message: MessageProps;
+  message: Message;
   isCurrentUser: boolean;
 }
 
@@ -26,7 +26,7 @@ const ChatMessage = ({ message, isCurrentUser }: ChatMessageProps) => {
         <div className="flex items-end gap-2">
           {isCurrentUser && (
             <span className="text-xs text-gray-500">
-              {formatTime(message.timestamp)}
+              {formatTime(message.createdAt)}
             </span>
           )}
           <div
@@ -36,11 +36,11 @@ const ChatMessage = ({ message, isCurrentUser }: ChatMessageProps) => {
                 : "bg-gray-100 text-black text-left"
             } rounded-lg py-2 px-3 text-sm`}
           >
-            {message.text}
+            {message.content}
           </div>
           {!isCurrentUser && (
             <span className="text-xs text-gray-500">
-              {formatTime(message.timestamp)}
+              {formatTime(message.createdAt)}
             </span>
           )}
         </div>

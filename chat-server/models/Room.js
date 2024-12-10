@@ -26,7 +26,7 @@ const roomSchema = new mongoose.Schema({
     content: String,
     senderId: String,
     senderName: String,
-    senderAvatar: String,
+    senderProfileImage: String,
     sentAt: Date,
   },
   createdAt: {

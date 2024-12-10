@@ -5,20 +5,30 @@ import { Input } from "../ui/input";
 import ChatMessage from "./ChatMessage";
 import { ChatHeader } from "./ChatHeader";
 import ChatInputForm from "./ChatInputForm";
+import { getChatMessages } from "@/utils/api";
 
-export interface MessageProps {
-  text: string;
+export interface Message {
+  content: string;
   username: string;
-  timestamp: string;
+  userId: string;
+  createdAt: string;
 }
 
 const ChatList = () => {
   const { roomId } = useParams();
   const [socket, setSocket] = useState<Socket | null>(null);
-  const [messages, setMessages] = useState<MessageProps[]>([]);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [username, setUsername] = useState("테스트 닉네임");
 
+  const fetchChatMessages = async () => {
+    if (!roomId) return;
+    const result = await getChatMessages(roomId);
+    setMessages(result);
+  };
+
   useEffect(() => {
+    fetchChatMessages();
+
     const newSocket = io("http://localhost:3001", {
       query: { roomId },
     });
@@ -31,7 +41,6 @@ const ChatList = () => {
 
     newSocket.on("message", (message) => {
       setMessages((prev) => [...prev, message]);
-      console.log(message);
     });
 
     return () => {
@@ -39,14 +48,13 @@ const ChatList = () => {
       newSocket.off("message");
       newSocket.disconnect();
     };
-  }, []);
+  }, [roomId]);
 
-  const handleSendMessage = (text: string) => {
+  const handleSendMessage = async (text: string) => {
     const messageData = {
-      text: text,
+      content: text,
       username: username,
-      timestamp: new Date().toISOString(),
-      roomId: roomId,
+      userId: "1",
     };
     socket?.emit("send_message", messageData);
   };
